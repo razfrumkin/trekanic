@@ -1,30 +1,24 @@
 import './Styles/Account.scss'
-import { useNavigate } from 'react-router-dom'
-import AppointmentManager from './AppointmentManager'
+import AppointmentManager from '../Components/AppointmentManager'
 import axios from 'axios'
+import { Page } from '../Router'
 
 const axiosInstance = axios.create({
-    withCredentials: true
+    withCredentials: true,
+    baseURL: 'https://10.0.0.14', 
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://10.0.0.14:3000/', 
+        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE', 
+        'Access-Control-Allow-Credentials': true
+    }
 })
-axiosInstance.defaults.baseURL = "http://127.0.0.1"
 
-const Account = () => {
-    const navigate = useNavigate()
-
+const Account = (props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) => {
     function logout() {
-        const headers = {
-            'Content-Type': 'application/json',
-            cookie: document.cookie
-        }
-    
-        const config = {
-            withCredentials: true,
-            headers: headers,
-        }
-
-        axiosInstance.post('http://10.0.0.14:3000/logout', {}, config).then(response => {
+        axiosInstance.post('https://10.0.0.14:3000/logout').then(response => {
             console.log(response)
-            navigate('/login')
+            props.setPage(Page.Login)
         }).catch(error => {
             console.error(error)
         })
