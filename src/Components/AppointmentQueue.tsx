@@ -6,7 +6,7 @@ const AppointmentQueue = (props: { appointments: AppointmentCollection, reload: 
         <>
             {
                 Object.values(props.appointments).map(appointment => {
-                    return <AppointmentPanel key={appointment.issue} appointment={appointment} reload={props.reload}/>
+                    return <AppointmentPanel key={appointment.product} appointment={appointment} reload={props.reload}/>
                 })
             }
         </>

@@ -29,10 +29,6 @@ const AppointmentManager = (props: { style?: CSSProperties }) => {
         reload()
     }, [])
 
-    useEffect(() => {
-        console.log('damn')
-    }, [appointments])
-
     function createAppointment() {
         setId('')
         setCreateMode(true)

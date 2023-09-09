@@ -2,27 +2,28 @@ export type AppointmentCollection = {
     [key: string]: Appointment
 }
 
+export type ObjectID = string
+
 export type Appointment = {
-    issue: string
+    id: ObjectID
+    issue: Issue
     date: Date
     description: string
     customer: string
-    mechanic: string
+    mechanic: ObjectID
     product: string
 }
 
 export type Issue = {
-    code: string
+    id: ObjectID
+    code: number
     title: string
-    price: number
-    category: string
+    price: number | null
+    category: IssueCategory
     duration: number
 }
 
-export type MechanicCollection = {
-    [key: string]: string
-}
-
-export type CategoryCollection = {
-    [key: string]: string
+export type IssueCategory = {
+    id: ObjectID
+    name: string
 }

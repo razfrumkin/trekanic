@@ -1,8 +1,9 @@
 import ReactModal from 'react-modal'
-import { AppointmentCollection, Appointment, Issue, MechanicCollection, CategoryCollection } from '../Models/Appointment'
+import { AppointmentCollection, Appointment, ObjectID } from '../Models/Appointment';
 import { useEffect, useState } from 'react'
-import { createAppointment, editAppointment, getCategories, getIssue, getMechanics } from '../Service'
-import Spacer from './Spacer'
+import { createAppointment, editAppointment, getIssueCategories } from '../Service'
+import { HashMap } from '../Utilities'
+import { RawIssue } from '../Database';
 
 type AppointmentModalProperties = {
     isActive: boolean
@@ -17,38 +18,31 @@ type AppointmentModalProperties = {
 
 const AppointmentModal = (props: AppointmentModalProperties) => {
     const appointment: Appointment | null = props.appointments[props.id] ?? null
-    const [issue, setIssue] = useState<Issue | null>(null)
-    const [mechanics, setMechanics] = useState<MechanicCollection>({})
-    const [categories, setCategories] = useState<CategoryCollection>({})
+    const [issueCategories, setIssueCategories] = useState<HashMap<RawIssue[]>>({})
 
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [mechanicId, setMechanicId] = useState<string>('?')
-    const [categoryId, setCategoryId] = useState<string>('?')
+    const [issueCategory, setIssueCategory] = useState<ObjectID>('?')
+    const [issueIndex, setIssueIndex] = useState<number>(-1)
 
     useEffect(() => {
-        getMechanics().then(response => {
-            setMechanics(response)
-        })
-
-        getCategories().then(response => {
-            setCategories(response)
-        })
-
-        if (appointment === null) return
-        getIssue(appointment.issue).then(response => {
-            setIssue(response)
-
-            setTitle(issue!.title)
+        if (appointment === null) {
+            setTitle('')
+            setDescription('')
+        } else {
+            setTitle(appointment.issue.title)
             setDescription(appointment.description)
-            setMechanicId(appointment.mechanic)
-            setCategoryId(issue!.category)
+        }
+
+        getIssueCategories().then(response => {
+            setIssueCategories(response)
+            console.log(response)
         })
     }, [])
 
     function submit() {
         if (props.createMode) {
-            createAppointment(title, description, mechanicId, categoryId).then(response => {
+            createAppointment(issueCategories[issueCategory][issueIndex].id, new Date(), description, 'product lol').then(response => {
                 if (response) {
                     props.reload()
                     cancel()
@@ -99,34 +93,38 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
                     <textarea id="title" style={{ fontSize: '24px', padding: '10px' }} value={description} onChange={event => setDescription(event.target.value)} placeholder="Description here..."/>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <label htmlFor="appointment-mechanic-id" style={{ fontSize: '18px' }}>Mechanic</label>
-                        <select id="appointment-mechanic-id" style={{ fontSize: '20px', padding: '5px' }} value={mechanicId} onChange={event => setMechanicId(event.target.value)}>
-                            <option key="?" selected disabled value={'?'}>Select mechanic</option>
-                            {
-                                Object.keys(mechanics).map(id => {
-                                    return <option key={id} value={id}>{mechanics[id]}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-
-                    <Spacer/>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <label htmlFor="appointment-category-id" style={{ fontSize: '18px' }}>Category</label>
-                        <select id="appointment-category-id" style={{ fontSize: '20px', padding: '5px' }} value={categoryId} onChange={event => setCategoryId(event.target.value)}>
-                            <option key="?" selected disabled value={'?'}>Select category</option>
-                            {
-                                Object.keys(categories).map(id => {
-                                    return <option key={id} value={id}>{categories[id]}</option>
-                                })
-                            }
-                        </select>
-                    </div>
-                </div>
                 <hr style={{ width: '100%', borderTop: '3px solid #ccc' }}/>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <label htmlFor="issue-categories-id" style={{ fontSize: '18px' }}>Category</label>
+                        <select id="issue-categories-id" style={{ fontSize: '20px', padding: '5px' }} value={issueCategory} onChange={event => setIssueCategory(event.target.value)}>
+                            <option key="?" selected disabled value={'?'}>Select Category</option>
+                            {
+                                Object.keys(issueCategories).map(id => {
+                                    return <option key={id} value={id}>{issueCategories[id][0].category.name}</option>
+                                })
+                            }
+                        </select>
+                    </div>
+
+                    {
+                        issueCategory in issueCategories ?
+                        <>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                <label htmlFor="issue-index" style={{ fontSize: '18px' }}>Issue</label>
+                                <select id="issue-index" style={{ fontSize: '20px', padding: '5px' }} value={issueIndex} onChange={event => setIssueIndex(Number(event.target.value))}>
+                                    <option key="?" selected disabled value={-1}>Select Issue</option>
+                                    {
+                                        issueCategories[issueCategory].map((issue, index) => {
+                                            return <option key={index} value={index}>{`${issue.title} - ${issue.price}₪`}</option>
+                                        })
+                                    }
+                                </select>
+                            </div>
+                        </> : <></>
+                    }
+                </div>
 
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
                     <button type="button" style={{ fontSize: '20px', padding: '10px' }} onClick={submit}>Save</button>
