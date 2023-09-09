@@ -1,22 +1,11 @@
 import './Styles/Account.scss'
-import AppointmentManager from '../Components/AppointmentManager'
-import axios from 'axios'
-import { Page } from '../Router'
-
-const axiosInstance = axios.create({
-    withCredentials: true,
-    baseURL: 'https://10.0.0.14', 
-    headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://10.0.0.14:3000/', 
-        'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE', 
-        'Access-Control-Allow-Credentials': true
-    }
-})
+import AppointmentManager from '../components/AppointmentManager'
+import Page from '../Models/Page'
+import { tryLogout } from '../Service'
 
 const Account = (props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) => {
     function logout() {
-        axiosInstance.post('https://10.0.0.14:3000/logout').then(response => {
+        tryLogout().then(response => {
             console.log(response)
             props.setPage(Page.Login)
         }).catch(error => {

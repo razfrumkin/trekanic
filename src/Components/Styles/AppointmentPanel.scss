@@ -1,0 +1,33 @@
+.appointment-panel {
+    width: 100%;
+    border: 3px solid black;
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-color: rgb(255, 255, 255, 0.5);
+        padding: 10px;
+        gap: 10px;
+
+        .title {
+            font-size: 22px;
+        }
+
+        .date {
+            font-size: 14px;
+            color: gray;
+        }
+
+        .error {
+            font-size: 16px;
+            color: red;
+        }
+    }
+
+    .inner {
+        display: flex;
+        flex-direction: column;
+        padding: 25px;
+    }
+}

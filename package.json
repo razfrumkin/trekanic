@@ -12,10 +12,12 @@
     "server": "vite --host 10.0.0.6 --port 5173"
   },
   "dependencies": {
+    "@types/react-modal": "^3.16.0",
     "axios": "^1.5.0",
     "https": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.15.0"
   },
   "devDependencies": {

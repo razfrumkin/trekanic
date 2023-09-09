@@ -1,11 +1,15 @@
 import AppointmentPanel from './AppointmentPanel'
-import Appointment from '../Models/Appointment'
+import { AppointmentCollection } from '../Models/Appointment'
 
-function AppointmentQueue(props: { appointments: Appointment[] }) {
+const AppointmentQueue = (props: { appointments: AppointmentCollection, reload: () => void }) => {
     return (
-        props.appointments.forEach(appointment => {
-            <AppointmentPanel appointment={appointment}/>
-        })
+        <>
+            {
+                Object.values(props.appointments).map(appointment => {
+                    return <AppointmentPanel key={appointment.issue} appointment={appointment} reload={props.reload}/>
+                })
+            }
+        </>
     )
 }
 
