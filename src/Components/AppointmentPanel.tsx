@@ -1,11 +1,11 @@
 import './Styles/AppointmentPanel.scss'
-import { Appointment } from '../Models/Appointment'
+import { Appointment, ObjectID } from '../Models/Appointment'
 import { useState } from 'react'
 import { deleteAppointment } from '../Service'
-import { formatTime } from '../Utilities'
+import { formatTime, months } from '../Utilities'
 import Spacer from './Spacer'
 
-const AppointmentPanel = (props: { appointment: Appointment, reload: () => void }) => {
+const AppointmentPanel = (props: { appointment: Appointment, editAppointment: (appointmentId: ObjectID) => void, reload: () => void }) => {
     const [error, setError] = useState<string>('')
 
     function removeAppointment() {
@@ -27,13 +27,13 @@ const AppointmentPanel = (props: { appointment: Appointment, reload: () => void 
                 <Spacer/>
                 <span className="error">{error}</span>
                 <Spacer/>
-                <button type="button">Edit</button>
+                <button type="button" onClick={() => props.editAppointment(props.appointment.id)}>Edit</button>
                 <button type="button" onClick={removeAppointment}>Delete</button>
             </div>
             <div className="inner">
-                <p>{props.appointment.description}</p>
+                <p style={{ margin: '0px', padding: '0px' }}>{props.appointment.description}</p>
                 <span>{props.appointment.issue.price} NIS</span>
-                <span>Duration: {secondsToHMS(props.appointment.issue.duration)}</span>
+                <span>Duration: {Math.floor(props.appointment.issue.duration / 60000)} minutes</span>
             </div>
         </div>
     )
@@ -42,17 +42,5 @@ const AppointmentPanel = (props: { appointment: Appointment, reload: () => void 
 function formatDateTime(date: Date): string {
     return `${months[date.getMonth()]} ${formatTime(date.getDate())} ${formatTime(date.getHours())}:${formatTime(date.getMinutes())}`
 }
-
-function secondsToHMS(seconds: number): string {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    const remainingSeconds = seconds % 60
-    return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(remainingSeconds)}`;
-}
-
-const months: string[] = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-]
 
 export default AppointmentPanel

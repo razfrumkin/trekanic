@@ -1,5 +1,5 @@
-import { Appointment, Issue, AppointmentCollection, ObjectID } from './Models/Appointment';
-import { appointments, RawIssue, rawIssues } from './Database'
+import { Appointment, Issue, AppointmentCollection, ObjectID } from './Models/Appointment'
+import { appointments, RawIssue, rawIssues, availableDates, AppointmentTime } from './Database'
 import { HashMap } from './Utilities'
 
 export async function isAuthenticated(): Promise<boolean> {
@@ -17,8 +17,12 @@ export async function getIssueCategories(): Promise<HashMap<RawIssue[]>> {
     return result
 }
 
+export async function getAvailableDates(): Promise<AppointmentTime[]> {
+    return availableDates
+}
+
 export async function getAppointments(): Promise<AppointmentCollection> {
-    console.log('Loading appointments...')
+    //console.log('Loading appointments...')
 
     // request here
     await timeout(500)
@@ -26,7 +30,7 @@ export async function getAppointments(): Promise<AppointmentCollection> {
 }
 
 export async function deleteAppointment(id: string): Promise<boolean> {
-    console.log(`Deleting appointment with id: '${id}'`)
+    //console.log(`Deleting appointment with id: '${id}'`)
 
     // request here
     await timeout(500)
@@ -35,7 +39,7 @@ export async function deleteAppointment(id: string): Promise<boolean> {
 }
 
 // issue, date, description, product
-export async function createAppointment(issueId: ObjectID, date: Date, description: string, product: string): Promise<boolean> {
+export async function createAppointment(issueId: ObjectID, time: AppointmentTime, description: string, product: string): Promise<boolean> {
     let issue: Issue | null = null
 
     rawIssues.forEach(value => {
@@ -46,7 +50,7 @@ export async function createAppointment(issueId: ObjectID, date: Date, descripti
                 title: value.title,
                 price: value.price,
                 category: value.category,
-                duration: 1
+                duration: time.duration
             }
 
             return
@@ -56,7 +60,7 @@ export async function createAppointment(issueId: ObjectID, date: Date, descripti
     const appointment: Appointment = {
         id: generateId(),
         issue: issue!,
-        date: date,
+        date: time.date,
         description: description,
         customer: generateId(),
         mechanic: '',

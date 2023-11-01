@@ -2,6 +2,54 @@ import { Appointment, IssueCategory, ObjectID } from './Models/Appointment'
 import { HashMap } from './Utilities'
 import { generateId } from './Service'
 
+export type AppointmentTime = {
+    date: Date
+    duration: number
+}
+
+export const availableDates: AppointmentTime[] = [
+    {
+        date: new Date(2023, 10, 2, 11, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 2, 13, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 2, 15, 0, 0),
+        duration: 3600000
+    },
+    {
+        date: new Date(2023, 10, 3, 11, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 3, 12, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 3, 19, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 3, 21, 0, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 4, 13, 0, 0),
+        duration: 2700000
+    },
+    {
+        date: new Date(2023, 10, 4, 20, 30, 0),
+        duration: 1800000
+    },
+    {
+        date: new Date(2023, 10, 5, 15, 30, 0),
+        duration: 1800000
+    },
+]
+
 export type RawIssue = {
     id: ObjectID
     code: number
@@ -716,7 +764,7 @@ export const rawIssues: RawIssue[] = [
 ]
 
 export const appointments: HashMap<Appointment> = {
-    'fk3k24rhj3': {
+    /*'fk3k24rhj3': {
         id: generateId(),
         issue: {
             id: generateId(),
@@ -727,7 +775,7 @@ export const appointments: HashMap<Appointment> = {
                 id: generateId(),
                 name: '',
             },
-            duration: 3600
+            duration: 3600000
         },
         date: new Date(),
         description: 'this is a description\nit\'s multiline too lol',
@@ -746,7 +794,7 @@ export const appointments: HashMap<Appointment> = {
                 id: generateId(),
                 name: ''
             },
-            duration: 1800
+            duration: 2700000
         },
         date: new Date(),
         description: 'Hello hello hi hi hi',
@@ -765,12 +813,12 @@ export const appointments: HashMap<Appointment> = {
                 id: generateId(),
                 name: ''
             },
-            duration: 2400
+            duration: 1800000
         },
         date: new Date(),
         description: 'hahahaah im goin insane',
         customer: generateId(),
         mechanic: 'jt',
         product: '3unfum2'
-    }
+    }*/
 }

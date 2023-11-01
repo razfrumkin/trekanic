@@ -1,9 +1,10 @@
 import ReactModal from 'react-modal'
-import { AppointmentCollection, Appointment, ObjectID } from '../Models/Appointment';
+import { AppointmentCollection, Appointment, ObjectID } from '../Models/Appointment'
 import { useEffect, useState } from 'react'
 import { createAppointment, editAppointment, getIssueCategories } from '../Service'
 import { HashMap } from '../Utilities'
-import { RawIssue } from '../Database';
+import { RawIssue, AppointmentTime } from '../Database';
+import TimeInput from './TimeInput'
 
 type AppointmentModalProperties = {
     isActive: boolean
@@ -11,7 +12,7 @@ type AppointmentModalProperties = {
     appointments: AppointmentCollection
     setAppointments: React.Dispatch<React.SetStateAction<AppointmentCollection>>
     createMode: boolean
-    id: string
+    id: ObjectID
     setId: React.Dispatch<React.SetStateAction<string>>,
     reload: () => void
 }
@@ -20,29 +21,42 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
     const appointment: Appointment | null = props.appointments[props.id] ?? null
     const [issueCategories, setIssueCategories] = useState<HashMap<RawIssue[]>>({})
 
-    const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [issueCategory, setIssueCategory] = useState<ObjectID>('?')
     const [issueIndex, setIssueIndex] = useState<number>(-1)
+    const [time, setTime] = useState<AppointmentTime | null>(null)
 
     useEffect(() => {
-        if (appointment === null) {
-            setTitle('')
-            setDescription('')
-        } else {
-            setTitle(appointment.issue.title)
-            setDescription(appointment.description)
-        }
-
         getIssueCategories().then(response => {
             setIssueCategories(response)
-            console.log(response)
+
+            if (appointment === null) {
+                setDescription('')
+                setIssueCategory('?')
+                setIssueIndex(-1)
+                setTime(null)
+            } else {
+                setDescription(appointment.description)
+                setIssueCategory(appointment.issue.category.id)
+
+                const issues = response[appointment.issue.category.id]
+                let issueIndex = -1
+                issues.forEach((issue, index) => {
+                    if (issue.id === appointment.issue.id) {
+                        issueIndex = index
+                        return
+                    }
+                })
+                setIssueIndex(issueIndex)
+
+                setTime({ date: appointment.date, duration: appointment.issue.duration })
+            }
         })
     }, [])
 
     function submit() {
         if (props.createMode) {
-            createAppointment(issueCategories[issueCategory][issueIndex].id, new Date(), description, 'product lol').then(response => {
+            createAppointment(issueCategories[issueCategory][issueIndex].id, time!, description, 'product lol').then(response => {
                 if (response) {
                     props.reload()
                     cancel()
@@ -62,6 +76,11 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
     function cancel() {
         props.setIsActive(false)
     }
+    
+    function changeIssueCategory(category: string) {
+        setIssueCategory(category)
+        setIssueIndex(-1)
+    }
 
     return (
         <ReactModal
@@ -80,14 +99,9 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
                 }
             }}
         >
-            <h2>New Appointment</h2>
+            <h2>{props.createMode ? 'New Appointment' : 'Edit Appointment'}</h2>
 
             <form style={{ display: 'flex', flexDirection: 'column', gap: '20px'}}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <label htmlFor="title" style={{ fontSize: '20px'}}>Title</label>
-                    <input type="text" style={{ fontSize: '24px', padding: '10px' }} id="title" value={title} onChange={event => setTitle(event.target.value)} placeholder="Title here..."/>
-                </div>
-
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                     <label htmlFor="description" style={{ fontSize: '22px'}}>Description</label>
                     <textarea id="title" style={{ fontSize: '24px', padding: '10px' }} value={description} onChange={event => setDescription(event.target.value)} placeholder="Description here..."/>
@@ -98,7 +112,7 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <label htmlFor="issue-categories-id" style={{ fontSize: '18px' }}>Category</label>
-                        <select id="issue-categories-id" style={{ fontSize: '20px', padding: '5px' }} value={issueCategory} onChange={event => setIssueCategory(event.target.value)}>
+                        <select id="issue-categories-id" style={{ fontSize: '20px', padding: '5px' }} value={issueCategory} onChange={event => changeIssueCategory(event.target.value)}>
                             <option key="?" selected disabled value={'?'}>Select Category</option>
                             {
                                 Object.keys(issueCategories).map(id => {
@@ -125,6 +139,8 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
                         </> : <></>
                     }
                 </div>
+
+                <TimeInput time={time} setTime={setTime}/>
 
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
                     <button type="button" style={{ fontSize: '20px', padding: '10px' }} onClick={submit}>Save</button>

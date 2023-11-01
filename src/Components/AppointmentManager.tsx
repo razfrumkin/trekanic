@@ -1,6 +1,6 @@
-import { useState, CSSProperties, useEffect } from 'react';
+import { useState, CSSProperties, useEffect } from 'react'
 import './Styles/AppointmentManager.scss'
-import { AppointmentCollection } from '../Models/Appointment'
+import { AppointmentCollection, ObjectID } from '../Models/Appointment'
 import AppointmentQueue from './AppointmentQueue'
 import { getAppointments } from '../Service'
 import AppointmentModal from './AppointmentModal'
@@ -11,17 +11,14 @@ const AppointmentManager = (props: { style?: CSSProperties }) => {
     const [showNewAppointmentModal, setShowNewAppointmentModal] = useState<boolean>(false)
     const [createMode, setCreateMode] = useState<boolean>(true)
 
-    const [id, setId] = useState<string>('')
+    const [id, setId] = useState<ObjectID>('')
     
     function reload() {
         getAppointments().then(response => {
-            console.log(appointments)
             setAppointments({})
             setTimeout(() => {
                 setAppointments(response)
             }, 0)
-        }).catch(error => {
-            console.error(error)
         })
     }
 
@@ -32,6 +29,12 @@ const AppointmentManager = (props: { style?: CSSProperties }) => {
     function createAppointment() {
         setId('')
         setCreateMode(true)
+        setShowNewAppointmentModal(true)
+    }
+
+    function editAppointment(appointmentId: ObjectID) {
+        setId(appointmentId)
+        setCreateMode(false)
         setShowNewAppointmentModal(true)
     }
 
@@ -51,7 +54,7 @@ const AppointmentManager = (props: { style?: CSSProperties }) => {
                 <span style={{ fontSize: '32px' }}>Manager</span>
                 <button type="button" style={{ fontSize: '16px', padding: '10px' }} onClick={createAppointment}>Create Appointment</button>
             </div>
-            <AppointmentQueue appointments={appointments} reload={reload}/>
+            <AppointmentQueue appointments={appointments} editAppointment={editAppointment} reload={reload}/>
         </div>
     )
 }
