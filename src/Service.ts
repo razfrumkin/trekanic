@@ -38,28 +38,20 @@ export async function deleteAppointment(id: string): Promise<boolean> {
     return true
 }
 
-// issue, date, description, product
 export async function createAppointment(issueId: ObjectID, time: AppointmentTime, description: string, product: string): Promise<boolean> {
-    let issue: Issue | null = null
-
-    rawIssues.forEach(value => {
-        if (value.id === issueId) {
-            issue = {
-                id: issueId,
-                code: value.code,
-                title: value.title,
-                price: value.price,
-                category: value.category,
-                duration: time.duration
-            }
-
-            return
-        }
-    })
+    const rawIssue = getRawIssueById(issueId)!
+    const issue: Issue = {
+        id: issueId,
+        code: rawIssue.code,
+        title: rawIssue.title,
+        price: rawIssue.price,
+        category: rawIssue.category,
+        duration: time.duration
+    }
     
     const appointment: Appointment = {
         id: generateId(),
-        issue: issue!,
+        issue: issue,
         date: time.date,
         description: description,
         customer: generateId(),
@@ -72,10 +64,43 @@ export async function createAppointment(issueId: ObjectID, time: AppointmentTime
     return true
 }
 
-export async function editAppointment(): Promise<boolean> {
+export async function editAppointment(appointmentId: ObjectID, issueId: ObjectID, time: AppointmentTime, description: string, product: string): Promise<boolean> {
+    const rawIssue = getRawIssueById(issueId)!
+    const issue: Issue = {
+        id: issueId,
+        code: rawIssue.code,
+        title: rawIssue.title,
+        price: rawIssue.price,
+        category: rawIssue.category,
+        duration: time.duration
+    }    
 
+    const appointment = appointments[appointmentId]
+    appointment.issue = issue
+    appointment.date = time.date
+    appointment.description = description
+    appointment.product = product
 
     return true
+}
+
+function getRawIssueById(issueId: ObjectID): RawIssue | null {
+    console.log({ issueId, rawIssues })
+
+    for (let index = 0; index < rawIssues.length; index += 1) {
+        const rawIssue = rawIssues[index]
+
+        if (rawIssue.id === issueId)
+            return {
+                id: issueId,
+                code: rawIssue.code,
+                title: rawIssue.title,
+                price: rawIssue.price,
+                category: rawIssue.category,
+            }
+    }
+
+    return null
 }
 
 export async function tryLogin(username: string, password: string) {

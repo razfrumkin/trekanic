@@ -1,3 +1,105 @@
+$accent-green: rgb(123, 207, 109);
+$accent-blue: rgb(92, 167, 217);
+$accent-red: rgb(222, 95, 83);
+$accent-gray: rgb(180, 183, 188);
+$accent-darker-gray: rgb(159, 164, 171);
+
+.appointment-panel {
+    border-radius: 15px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    width: 100%;
+    background-color: white;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 50px;
+
+    .buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+
+        .edit-button {
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 500px;
+            border: none;
+            background-color: $accent-blue;
+            color: white;
+
+            &:hover {
+                background-color: rgb($accent-blue, 0.5);
+                cursor: pointer;
+            }
+        }
+
+        .delete-button {
+            font-size: 20px;
+            padding: 10px 20px;
+            border-radius: 500px;
+            border: none;
+            background-color: $accent-red;
+            color: white;
+
+            &:hover {
+                background-color: rgb($accent-red, 0.5);
+                cursor: pointer;
+            }
+        }
+    }
+
+    .title {
+        font-size: 40px;
+    }
+
+    .date {
+        font-size: 25px;
+        color: $accent-darker-gray;
+    }
+
+    .description {
+        margin: 0;
+        padding: 0;
+        font-size: 30px;
+    }
+
+    .length-label {
+        color: $accent-gray;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .length {
+        padding: 10px;
+        color: $accent-blue;
+        border: 3px solid $accent-blue;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 20px;
+        background-color: rgba($accent-blue, 0.1);
+    }
+
+    .price-label {
+        color: $accent-gray;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .price {
+        padding: 10px;
+        color: $accent-green;
+        border: 3px solid $accent-green;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 20px;
+        background-color: rgba($accent-green, 0.1);
+    }
+}
+
+/*
+
 .appointment-panel {
     width: 100%;
     border: 3px solid black;
@@ -32,3 +134,5 @@
         padding: 25px;
     }
 }
+
+*/

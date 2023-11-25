@@ -55,8 +55,10 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
     }, [])
 
     function submit() {
+        const issueId = issueCategories[issueCategory][issueIndex].id
+
         if (props.createMode) {
-            createAppointment(issueCategories[issueCategory][issueIndex].id, time!, description, 'product lol').then(response => {
+            createAppointment(issueId, time!, description, 'product lol').then(response => {
                 if (response) {
                     props.reload()
                     cancel()
@@ -65,7 +67,7 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
             return
         }
 
-        editAppointment().then(response => {
+        editAppointment(props.id, issueId, time!, description, 'product lol').then(response => {
             if (response) {
                 props.reload()
                 cancel()

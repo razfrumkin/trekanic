@@ -1,6 +1,7 @@
 enum Page {
     Login,
     Account,
+    AdminDashboard,
     Loading
 }
 

@@ -1,39 +1,41 @@
 import './Styles/AppointmentPanel.scss'
 import { Appointment, ObjectID } from '../Models/Appointment'
-import { useState } from 'react'
 import { deleteAppointment } from '../Service'
 import { formatTime, months } from '../Utilities'
-import Spacer from './Spacer'
 
 const AppointmentPanel = (props: { appointment: Appointment, editAppointment: (appointmentId: ObjectID) => void, reload: () => void }) => {
-    const [error, setError] = useState<string>('')
-
     function removeAppointment() {
-        deleteAppointment(props.appointment.product).then(response => {
+        deleteAppointment(props.appointment.id).then(response => {
             if (response) {
-                setError('')
                 props.reload()
-            } else {
-                setError('Could not delete appointment')
             }
         })
     }
 
     return (
         <div className="appointment-panel">
-            <div className="menu">
+            <div className="buttons">
+                <button className="edit-button" type="button" onClick={() => props.editAppointment(props.appointment.id)}>EDIT</button>
+                <button className="delete-button" type="button" onClick={removeAppointment}>DELETE</button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span className="title">{props.appointment.issue.title}</span>
                 <span className="date">{formatDateTime(props.appointment.date)}</span>
-                <Spacer/>
-                <span className="error">{error}</span>
-                <Spacer/>
-                <button type="button" onClick={() => props.editAppointment(props.appointment.id)}>Edit</button>
-                <button type="button" onClick={removeAppointment}>Delete</button>
             </div>
-            <div className="inner">
-                <p style={{ margin: '0px', padding: '0px' }}>{props.appointment.description}</p>
-                <span>{props.appointment.issue.price} NIS</span>
-                <span>Duration: {Math.floor(props.appointment.issue.duration / 60000)} minutes</span>
+
+            <p className="description">{props.appointment.description}</p>
+
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <span className="length-label">LENGTH</span>
+                    <span className="length">{Math.floor(props.appointment.issue.duration / 60000)} MINUTES</span>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <span className="price-label">PRICE</span>
+                    <span className="price">{props.appointment.issue.price} NIS</span>
+                </div>
             </div>
         </div>
     )

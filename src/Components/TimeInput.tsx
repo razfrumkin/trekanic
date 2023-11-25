@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getAvailableDates } from '../Service'
 import { AppointmentTime } from '../Database'
-import { formatTime, months } from '../Utilities'
+import { formatTime, months, startDayTimestamp } from '../Utilities'
 
 const TimeInput = (props: { time: AppointmentTime | null, setTime: React.Dispatch<React.SetStateAction<AppointmentTime | null>> }) => {
     const [availableDates, setAvailableDates] = useState<{ [key: number]: AppointmentTime[] }>([])
@@ -17,20 +17,13 @@ const TimeInput = (props: { time: AppointmentTime | null, setTime: React.Dispatc
             const keys = Object.keys(dictionary).map(key => Number(key))
             setTimestampKeys(keys)
 
-            console.log(props.time)
-
             if (props.time !== null) {
-                const normalized = new Date(props.time.date)
-                normalized.setHours(0)
-                normalized.setMinutes(0)
-                normalized.setSeconds(0)
-                normalized.setMilliseconds(0)
-                const timestamp = normalized.getTime()
+                const timestamp = startDayTimestamp(props.time.date)
                 setSelectedTimestamp(timestamp)
 
                 let timeIndex = -1
                 dictionary[timestamp].forEach((time, index) => {
-                    if (time.date === props.time!.date && time.duration === props.time!.duration) {
+                    if (time.date.getTime() === props.time!.date.getTime() && time.duration === props.time!.duration) {
                         timeIndex = index
                         return
                     }
@@ -49,10 +42,6 @@ const TimeInput = (props: { time: AppointmentTime | null, setTime: React.Dispatc
         if (selectedTimeIndex < 0) props.setTime(null)
         else props.setTime(availableDates[selectedTimestamp][selectedTimeIndex])
     }, [selectedTimeIndex])
-
-    useEffect(() => {
-        console.log(selectedTimestamp)
-    }, [selectedTimestamp])
 
     return (
         timestampKeys.length === 0 ? <span>No available dates</span> :

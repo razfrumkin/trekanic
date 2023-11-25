@@ -1,5 +1,7 @@
 .appointment-manager {
     max-height: 1000px;
-    background-color: beige;
     overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
 }
