@@ -1,0 +1,7 @@
+.appointment-queue {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 1000px;
+    overflow: scroll;
+}

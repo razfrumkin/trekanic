@@ -1,5 +1,11 @@
 @import url('../../Router.scss');
 
+$accent-green: rgb(123, 207, 109);
+$accent-blue: rgb(92, 167, 217);
+$accent-red: rgb(222, 95, 83);
+$accent-gray: rgb(220, 224, 230);
+$accent-darker-gray: rgb(159, 164, 171);
+
 .container {
     width: 100%;
     height: 100%;
@@ -7,25 +13,55 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: $accent-gray;
+    font-family: 'Helvetica', 'Arial', sans-serif;
 
     form {
         display: flex;
         flex-direction: column;
-        gap: 25px;
+        gap: 40px;
         width: 25%;
 
         label {
-            font-size: 20px;
+            font-size: 30px;
+        }
+
+        .show-password {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
         }
 
         input {
-            font-size: 25px;
+            font-size: 45px;
+            padding: 20px;
+            outline: none;
+            border: none;
+            border-radius: 10px;
+        }
+
+        input[type=checkbox] {
+            /* Double-sized Checkboxes */
+            -ms-transform: scale(2); /* IE */
+            -moz-transform: scale(2); /* FF */
+            -webkit-transform: scale(2); /* Safari and Chrome */
+            -o-transform: scale(2); /* Opera */
+            transform: scale(2);
             padding: 10px;
         }
 
-        button {
-            font-size: 20px;
-            padding: 10px;
+        .login-button {
+            font-size: 30px;
+            padding: 15px;
+            border-radius: 500px;
+            border: none;
+            background-color: $accent-green;
+            color: white;
+
+            &:hover {
+                background-color: rgb($accent-green, 0.5);
+                cursor: pointer;
+            }
         }
     }
 }

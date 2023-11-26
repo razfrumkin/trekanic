@@ -1,9 +1,10 @@
+import './Styles/AppointmentModal.scss'
 import ReactModal from 'react-modal'
 import { AppointmentCollection, Appointment, ObjectID } from '../Models/Appointment'
 import { useEffect, useState } from 'react'
 import { createAppointment, editAppointment, getIssueCategories } from '../Service'
 import { HashMap } from '../Utilities'
-import { RawIssue, AppointmentTime } from '../Database';
+import { RawIssue, AppointmentTime } from '../Database'
 import TimeInput from './TimeInput'
 
 type AppointmentModalProperties = {
@@ -88,6 +89,9 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
         <ReactModal
             isOpen={props.isActive}
             style={{
+                overlay: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+                },
                 content: {
                     top: '50%',
                     left: '50%',
@@ -95,18 +99,18 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
                     bottom: 'auto',
                     marginRight: '-50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '400px',
-                    border: '1px solid black',
+                    width: '600px',
+                    border: 'none',
                     borderRadius: '15px',
                 }
             }}
         >
-            <h2>{props.createMode ? 'New Appointment' : 'Edit Appointment'}</h2>
+            <form className="appointment-form">
+                <h2>{props.createMode ? 'New Appointment' : 'Edit Appointment'}</h2>
 
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '20px'}}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                     <label htmlFor="description" style={{ fontSize: '22px'}}>Description</label>
-                    <textarea id="title" style={{ fontSize: '24px', padding: '10px' }} value={description} onChange={event => setDescription(event.target.value)} placeholder="Description here..."/>
+                    <textarea id="description" value={description} onChange={event => setDescription(event.target.value)} placeholder="Description here..."/>
                 </div>
 
                 <hr style={{ width: '100%', borderTop: '3px solid #ccc' }}/>
@@ -144,9 +148,9 @@ const AppointmentModal = (props: AppointmentModalProperties) => {
 
                 <TimeInput time={time} setTime={setTime}/>
 
-                <div style={{ display: 'flex', flexDirection: 'row', gap: '10px' }}>
-                    <button type="button" style={{ fontSize: '20px', padding: '10px' }} onClick={submit}>Save</button>
-                    <button type="button" style={{ fontSize: '20px', padding: '10px' }} onClick={cancel}>Cancel</button>
+                <div className="buttons">
+                    <button className="submit-button" type="button" onClick={submit}>SAVE</button>
+                    <button className="cancel-button" type="button" onClick={cancel}>CANCEL</button>
                 </div>
             </form>
         </ReactModal>

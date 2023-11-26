@@ -5,7 +5,7 @@ import AppointmentQueue from './AppointmentQueue'
 import { getAppointments } from '../Service'
 import AppointmentModal from './AppointmentModal'
 
-const AppointmentManager = (props: { style?: CSSProperties }) => {
+const AppointmentManager = (props: { logout: () => void, style?: CSSProperties }) => {
     const [appointments, setAppointments] = useState<AppointmentCollection>({})
 
     const [showNewAppointmentModal, setShowNewAppointmentModal] = useState<boolean>(false)
@@ -50,10 +50,14 @@ const AppointmentManager = (props: { style?: CSSProperties }) => {
                 setId={setId}
                 reload={reload}
             />}
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', padding: '10px', gap: '25px' }}>
-                <span style={{ fontSize: '32px' }}>Manager</span>
-                <button type="button" style={{ fontSize: '16px', padding: '10px' }} onClick={createAppointment}>Create Appointment</button>
+            <div className="menu">
+                <span>MANAGER</span>
+                <div className="buttons">
+                    <button className="create-appointment-button" type="button" onClick={createAppointment}>CREATE APPOINTMENT</button>
+                    <button className="logout-button" onClick={props.logout}>LOGOUT</button>
+                </div>
             </div>
+
             <AppointmentQueue appointments={appointments} editAppointment={editAppointment} reload={reload}/>
         </div>
     )

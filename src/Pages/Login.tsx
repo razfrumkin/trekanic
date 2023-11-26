@@ -24,13 +24,15 @@ const Login = (props: { setPage: React.Dispatch<React.SetStateAction<Page>> }) =
                     <input type="username" id="username" value={username} onChange={event => setUsername(event.target.value)} placeholder="Enter a username..."/>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <label htmlFor="password">Password</label>
-                    <input type={showPassword ? 'text': 'password'} id="password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Enter a password..."/>
-                    <label><input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)}/> Show password</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                        <label htmlFor="password">Password</label>
+                        <input type={showPassword ? 'text': 'password'} id="password" value={password} onChange={event => setPassword(event.target.value)} placeholder="Enter a password..."/>
+                    </div>
+                    <label className="show-password"><input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)}/> Show password</label>
                 </div>
 
-                <button type="button" onClick={login}>Login</button>
+                <button className="login-button" type="button" onClick={login}>LOGIN</button>
             </form>
         </div>
     )

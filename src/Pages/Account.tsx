@@ -15,9 +15,7 @@ const Account = (props: { setPage: React.Dispatch<React.SetStateAction<Page>> })
 
     return (
         <div className="account-container">
-            <h1>Account</h1>
-            <button onClick={logout}>Logout</button>
-            <AppointmentManager style={{ width: '50%' }}/>
+            <AppointmentManager logout={logout} style={{ width: '50%' }}/>
         </div>
     )
 }

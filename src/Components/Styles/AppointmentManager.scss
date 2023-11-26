@@ -1,7 +1,58 @@
+$accent-green: rgb(123, 207, 109);
+$accent-blue: rgb(92, 167, 217);
+$accent-red: rgb(222, 95, 83);
+$accent-gray: rgb(229, 231, 233);
+$accent-darker-gray: rgb(159, 164, 171);
+
 .appointment-manager {
-    max-height: 1000px;
-    overflow: scroll;
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        gap: 25px;
+
+        span {
+            font-size: 40px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+
+            .create-appointment-button {
+                font-size: 20px;
+                padding: 10px 20px;
+                border-radius: 500px;
+                border: none;
+                background-color: $accent-green;
+                color: white;
+    
+                &:hover {
+                    background-color: rgb($accent-green, 0.5);
+                    cursor: pointer;
+                }
+            }
+    
+            .logout-button {
+                font-size: 20px;
+                padding: 10px 20px;
+                border-radius: 500px;
+                border: none;
+                background-color: $accent-blue;
+                color: white;
+    
+                &:hover {
+                    background-color: rgb($accent-blue, 0.5);
+                    cursor: pointer;
+                }
+            }
+        }
+    }
 }

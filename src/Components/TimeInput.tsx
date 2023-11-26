@@ -47,7 +47,7 @@ const TimeInput = (props: { time: AppointmentTime | null, setTime: React.Dispatc
         timestampKeys.length === 0 ? <span>No available dates</span> :
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label htmlFor="timestamps" style={{ fontSize: '18px' }}>Dates</label>
+                <label htmlFor="timestamps" style={{ fontSize: '18px' }}>Date</label>
                 <select id="timestamps" style={{ fontSize: '20px', padding: '5px' }} value={selectedTimestamp} onChange={event => changeSelectedTimestamp(Number(event.target.value))}>
                     <option key={-1} selected disabled value={-1}>Select Date</option>
                     {
@@ -61,7 +61,7 @@ const TimeInput = (props: { time: AppointmentTime | null, setTime: React.Dispatc
             {
                 selectedTimestamp === -1 ? <></> :
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <label htmlFor="times" style={{ fontSize: '18px' }}>Times</label>
+                <label htmlFor="times" style={{ fontSize: '18px' }}>Time</label>
                 <select id="times" style={{ fontSize: '20px', padding: '5px' }} value={selectedTimeIndex} onChange={event => setSelectedTimeIndex(Number(event.target.value))}>
                     <option key={-1} selected disabled value={-1}>Select Time</option>
                     {
